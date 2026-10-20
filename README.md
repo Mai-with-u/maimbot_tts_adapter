@@ -7,7 +7,7 @@
 - 支持多种provider配置，可以动态启用不同的provider
 - 支持流式和非流式语音合成
 - 支持多平台预设配置
-- 基于 GPT-SoVITS 等provider实现高质量语音合成
+- 基于 GPT_Sovits、Doubao_TTS、Qwen_omni、MiniMax_TTS 等 provider 实现语音合成
 - 可配置的语音参数（语速、采样步数等）
 - 支持参考音频设置
 - 灵活的消息路由系统
@@ -67,6 +67,8 @@ voice_probability = 0.2 # 使用语音的概率
 [enabled_tts] # 启用的TTS模块，请与各插件的目录名称一致
 enabled = ["GPT_Sovits"]
 ```
+`enabled` 里的字符串必须与 `src/plugins/` 下的目录名完全一致，例如 `GPT_Sovits`、`Doubao_TTS`、`Qwen_omni`、`MiniMax_TTS`。启用 MiniMax 时写作 `enabled = ["MiniMax_TTS"]`。
+
 ### TTSBaseConfig 配置
 这部分是TTS的通用配置
 ```toml
@@ -105,8 +107,20 @@ platform1 = "preset1"
 platform2 = "preset2"
 ```
 
+## 内置 MiniMax TTS 插件配置
+
+把 `template_configs/MiniMax_tts_template.toml` 复制为 `configs/MiniMax_tts.toml`，填写自己的 `api_key`（模板中为空占位）。然后在 `configs/base.toml` 里启用，名称必须与目录 `src/plugins/MiniMax_TTS` 一致：
+
+```toml
+[enabled_tts] # 启用的TTS模块，请与各插件的目录名称一致
+enabled = ["MiniMax_TTS"]
+```
+
+默认请求国内接口 `https://api.minimax.cn/v1/t2a_v2`。国际站把 `t2a_url` 改为 `https://api.minimax.io/v1/t2a_v2`。非流式合成，`audio.format` 使用 `wav`，返回的音频字节可直接走现有 `encode_audio` / QQ 语音路径。请保持 `[tts_base_config] stream_mode = false`（本插件的 `tts_stream` 会报错）。默认音色是系统音色 `male-qn-qingse`，可按 [MiniMax 音色文档](https://platform.minimaxi.com/docs/api-reference/speech-t2a-http) 更换 `voice_id`。
+
 ## 内置其他服务商配置
-请参考[官方文档](https://docs.mai-mai.org/manual/adapters/tts/)使用。
+
+豆包（`Doubao_TTS`，模板 `template_configs/Doubao_tts_template.toml`）与通义千问 Omni（`Qwen_omni`，模板 `template_configs/Qwen_omni_template.toml`）同样通过 `enabled_tts.enabled` 按目录名启用。请参考[官方文档](https://docs.mai-mai.org/manual/adapters/tts/)使用。
 
 ## 使用方法
 

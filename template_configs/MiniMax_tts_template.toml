@@ -1,0 +1,20 @@
+# 注：请参考 MiniMax 同步语音合成文档 https://platform.minimaxi.com/docs/api-reference/speech-t2a-http
+# 复制本文件为 configs/MiniMax_tts.toml 后填写 api_key。不要把真实密钥提交到仓库。
+[app]
+# 国内接口。国际站常用 https://api.minimax.io/v1/t2a_v2
+t2a_url = "https://api.minimax.cn/v1/t2a_v2"
+api_key = "" # API Key，请求头为 Authorization: Bearer {api_key}
+model = "speech-2.8-turbo" # speech-2.8-hd / speech-2.8-turbo / speech-2.6-turbo 等
+language_boost = "auto" # 语种增强；未知语种用 auto，也可填 Chinese、English 等
+
+[voice]
+voice_id = "male-qn-qingse" # 系统音色 ID，可按官方音色列表更换
+speed = 1.0 # 语速，范围 [0.5, 2]，默认 1.0
+vol = 1.0 # 音量，范围 (0, 10]，默认 1.0
+pitch = 0 # 音调，范围 [-12, 12]，默认 0
+
+[audio]
+sample_rate = 32000 # 8000 / 16000 / 22050 / 24000 / 32000 / 44100
+bitrate = 128000 # 仅 mp3 生效：32000 / 64000 / 128000 / 256000
+format = "wav" # 保持 wav，以便 encode_audio / QQ 语音路径与豆包一致
+channel = 1 # 1 单声道，2 立体声
